@@ -1,0 +1,20 @@
+.Main{
+    padding: 10px;
+    margin: 15px;
+    grid-area: main;
+}
+
+section{
+    padding: 20px;
+    margin: 5px;
+}
+
+h2{
+    font-size: 30px;
+    color: rgb(41,44,51);
+}
+
+p{
+    color: rgb(138,138,138);
+    font-size: 20px;
+}

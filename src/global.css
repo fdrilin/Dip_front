@@ -1,0 +1,22 @@
+*{
+    font-family: Fire Sans,Droid Sans,Helvetica Neue, sans-serif;
+}
+
+.container {
+    max-width: 1600px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-areas: 
+        "head head head"
+        "sidebar main main"
+        "sidebar main main";
+}
+
+.user-page img {
+    max-width: 200px;
+    max-height: 200px;
+}
+
+a.active {
+    color: burlywood;
+}
