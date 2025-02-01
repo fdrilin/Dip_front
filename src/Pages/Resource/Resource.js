@@ -10,7 +10,10 @@ function Resource(){
 
     useEffect(() => {
     if (filename) {
-    fetch(filename)
+    fetch(filename, {   
+        method: 'GET',       
+        crossorigin: true,    
+        })
         .then(res => res.json())
         .then(res => setResources(res))
         .catch(_ => console.log(_));
@@ -26,8 +29,8 @@ function Resource(){
             <h2>Resource</h2>
             <TableMain columns = {columns} data={resources}/>
             <br/><a href='users'>better option</a>
-            <button id = "btnLoad" onClick={(event) => setFilename('data/resources.json')} >load</button>
-            <a href="resource/1">move</a>
+            <button id = "btnLoad" onClick={(event) => setFilename('https://localhost:7089/api/ResourceItems')} >load</button>
+            <a href="resource/0">add</a>
             <a href="users/1">move</a>
         </div>
     );

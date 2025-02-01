@@ -33,7 +33,7 @@ const router = createBrowserRouter(
         <Route index element={<Home/>}/>
         <Route path='booking' element={<Booking/>}/>
         <Route path='resource' element={<Resource/>}/>
-        <Route path='resource/:resourceId' loader={return1} element={<ResourceEdit/>}/>
+        <Route path='resource/:resourceId' loader={resourceLoader} element={<ResourceEdit/>}/>
         <Route path='about' element={<About/>}/>
         <Route path='users' loader={getUsers} element={<Users/>}/>
         <Route path='users/:userId' loader={loader} element={<UserPage/>} 
@@ -43,8 +43,9 @@ const router = createBrowserRouter(
    ) 
 )
 
-function return1() {
-    return 1;
+function resourceLoader({params}) {
+    //add fetch here
+    return params.resourceId;
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
