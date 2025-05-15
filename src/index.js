@@ -16,6 +16,7 @@ import UserPage from './Pages/Users/UserPage';
 import './global.css';
 import ErrorPage from './Pages/Error/Error';
 import ResourceEdit from './Pages/Resource/Edit'
+import BookingEdit from './Pages/Booking/Edit'
 
 const Root = () =>{
 return(
@@ -32,8 +33,9 @@ const router = createBrowserRouter(
     <Route path='/' element={<Root />}>
         <Route index element={<Home/>}/>
         <Route path='booking' element={<Booking/>}/>
+        <Route path='booking/:id' loader={idLoader} element={<BookingEdit/>}/>
         <Route path='resource' element={<Resource/>}/>
-        <Route path='resource/:resourceId' loader={resourceLoader} element={<ResourceEdit/>}/>
+        <Route path='resource/:id' loader={idLoader} element={<ResourceEdit/>}/>
         <Route path='about' element={<About/>}/>
         <Route path='users' loader={getUsers} element={<Users/>}/>
         <Route path='users/:userId' loader={loader} element={<UserPage/>} 
@@ -43,9 +45,9 @@ const router = createBrowserRouter(
    ) 
 )
 
-function resourceLoader({params}) {
+function idLoader({params}) {
     //add fetch here
-    return params.resourceId;
+    return params.id;
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

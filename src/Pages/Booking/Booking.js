@@ -4,27 +4,35 @@ import TableMain from "../../components/TableMain.js";
 
 function Booking(){
     const [filename, setFilename] = React.useState(null);
-    const [resources, setResources] = useState([]);
+    const [bookings, setBookings] = useState([]);
 
     useEffect(() => {
     if (filename) {
     fetch(filename)
         .then(res => res.json())
-        .then(res => setResources(res))
+        .then(res => setBookings(res))
         .catch(_ => console.log(_));
     }
     }, [filename]); 
 
-    let columns = ['id', 'begin_date', 'end_date'];
+    let columns = ['id', 'beginDate', 'endDate', 'rented', 'returned', 'canceled'];
 
     return(
         <div className="Main">
-            <h2>Resource</h2>
-            <TableMain columns = {columns} data={resources}/>
-            <br/><a href='users'>better option</a>
-            <button id = "btnLoad" onClick={(event) => setFilename('data/booking.json')} >load</button>
-            <a href="resource/1">move</a>
-            <a href="users/1">move</a>
+            <h2>Booking</h2>
+            <form className='bookingFilter' onSubmit={(e)=>{e.preventDefault();}}>
+                <div className='searchDiv'><label><span>Search: </span><input name="search"/></label></div>
+            </form>
+            <TableMain columns = {columns} data={bookings} url="booking"/>
+            <button id = "btnLoad" onClick={(event) => {
+                let url = "https://localhost:7089/api/BookingItems";
+                let search =  document.querySelector(".bookingFilter input[name=search]").value;
+                if (search) {
+                    url += "?search=" + search;
+                }
+                setFilename(url);
+            }} >load</button>
+            <a href="booking/0">add</a>
         </div>
     );
 }

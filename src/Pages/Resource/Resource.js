@@ -4,7 +4,7 @@ import './Main.css';
 import React, { useState, useEffect } from "react";
 import TableMain from "../../components/TableMain.js";
 
-function Resource(){
+function Resource(props){
     const [filename, setFilename] = React.useState(null);
     const [resources, setResources] = useState([]);
 
@@ -22,7 +22,7 @@ function Resource(){
 
     //Table(['id', 'title', 'description'], resources);  
 
-    let columns = ['id', 'title', 'description'];
+    let columns = ['id', 'title', 'description', 'serialNo', 'available'];
 
     return(
         <div className="resourceMain">
@@ -30,8 +30,8 @@ function Resource(){
             <form className='resourceFilter' onSubmit={(e)=>{e.preventDefault();}}>
                 <div className='searchDiv'><label><span>Search: </span><input name="search"/></label></div>
             </form>
-            <TableMain columns = {columns} data={resources}/>
-            <br/><a href='users'>better option</a>
+            <TableMain columns = {columns} data={resources} url='resource' selectId={props.selectId}/>
+            <br/>
             <button id = "btnLoad" onClick={(event) => {
                 let url = "https://localhost:7089/api/ResourceItems";
                 let search =  document.querySelector(".resourceFilter input[name=search]").value;
@@ -41,7 +41,6 @@ function Resource(){
                 setFilename(url);
             }} >load</button>
             <a href="resource/0">add</a>
-            <a href="users/1">move</a>
         </div>
     );
 }

@@ -3,8 +3,10 @@ import { findAllByTitle } from '@testing-library/react';
 import './Main.css';
 import React, { useState, useEffect } from "react";
 import { useLoaderData, useParams } from 'react-router-dom';
+import TableMain from '../../components/TableMain';
+import Resource from '../Resource/Resource';
 
-function Resource(){
+function Booking(){
     const resourceId = useLoaderData();
 
     const [resource, setResource] = useState({title: "", description: ""});
@@ -24,13 +26,16 @@ function Resource(){
     }, [resource]);
 
     return(
-        <div className="resourceEdit">
+        <div className="bookingEdit">
             <h2>EDIT</h2>
+
+            <Resource selectId="resourceId"/>
+
             <form onSubmit={(e)=>{e.preventDefault();}}>
                 {/*Needs fetch to function properly*/}
                 <input type = "hidden" name="id" defaultValue={resourceId}/>
                 <div className='titleDiv'><label><span>title</span><input name="title" defaultValue={resource.title}/></label></div>
-                <div className='descriptionDiv'><label><span>description</span><textarea defaultValue={resource.description} name="description"/></label></div>
+                <div className='resourceId'><label><span>resource id</span><input id="resourceId" name="resourceId" defaultValue={resource.resourceId}/></label></div>
                 <div className='serialNoDiv'><label><span>serial number</span><input name="serialNo" defaultValue={resource.serialNo}/></label></div>
                 <div className='availableDiv'><label><span>available</span><input name="available" defaultValue={resource.available}/></label></div>
                 <div className='ErrorDiv'><span>{error}</span></div>
@@ -42,17 +47,20 @@ function Resource(){
     function save() 
     {
         var id = document.querySelector(".resourceEdit input[name=id]").value;
-        var title = document.querySelector(".resourceEdit input[name=title]").value;
-        var description = document.querySelector(".resourceEdit textarea[name=description]").value;
-        var serialNo = document.querySelector(".resourceEdit input[name=serialNo]").value;
-        var available = document.querySelector(".resourceEdit input[name=available]").value;
+        var resourceId = document.querySelector(".resourceEdit input[name=resourceId]").value;
+        var userId = document.querySelector(".resourceEdit textarea[name=userId]").value;
+        var beginDate = document.querySelector(".resourceEdit input[name=beginDate]").value;
+        var endDate = document.querySelector(".resourceEdit input[name=endDate]").value;
+        var rented = document.querySelector(".resourceEdit input[name=rented]").value;
+        var returned = document.querySelector(".resourceEdit input[name=returned]").value;
+        var canceled = document.querySelector(".resourceEdit input[name=canceled]").value;
     
         if (id == 0) {
-            fetch("https://localhost:7089/api/ResourceItems", {   
+            fetch("https://localhost:7089/api/BookingItems", {   
                 method: 'Post',       
                 crossorigin: true,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title: title, description: description, serialno: serialNo, available: available })
+                body: JSON.stringify({ resourceId: resourceId, userId: userId, beginDate: beginDate, endDate: endDate, rented: rented, returned: returned, canceled: canceled })
                 })
                 .then(res => {
                     let data = res.json();
@@ -65,11 +73,11 @@ function Resource(){
                 //.then(res => console.log(res))
                 .catch(_ => console.log(_));
         } else {
-            fetch("https://localhost:7089/api/ResourceItems/" + id.toString(), {   
+            fetch("https://localhost:7089/api/BookingItems/" + id.toString(), {   
                 method: 'Put',       
                 crossorigin: true,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id: id, title: title, description: description, serialno: serialNo, available: available})
+                body: JSON.stringify({ id: id, resourceId: resourceId, userId: userId, beginDate: beginDate, endDate: endDate, rented: rented, returned: returned, canceled: canceled })
                 })
                 .then(res => res.json())
                 //.then(res => setResources(res))
@@ -79,4 +87,4 @@ function Resource(){
         
 }
 
-export default Resource;
+export default Booking;
