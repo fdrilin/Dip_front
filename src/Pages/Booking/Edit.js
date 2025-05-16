@@ -29,15 +29,13 @@ function Booking(){
         <div className="bookingEdit">
             <h2>EDIT</h2>
 
-            <Resource selectId="resourceId"/>
-
             <form onSubmit={(e)=>{e.preventDefault();}}>
                 {/*Needs fetch to function properly*/}
                 <input type = "hidden" name="id" defaultValue={resourceId}/>
-                <div className='titleDiv'><label><span>title</span><input name="title" defaultValue={resource.title}/></label></div>
+                <div className='beginDate'><label><span>begin date</span><input name="beginDate" defaultValue={resource.title}/></label></div>
+                <div className='endDate'><label><span>end date</span><input name="endDate" defaultValue={resource.title}/></label></div>
                 <div className='resourceId'><label><span>resource id</span><input id="resourceId" name="resourceId" defaultValue={resource.resourceId}/></label></div>
-                <div className='serialNoDiv'><label><span>serial number</span><input name="serialNo" defaultValue={resource.serialNo}/></label></div>
-                <div className='availableDiv'><label><span>available</span><input name="available" defaultValue={resource.available}/></label></div>
+                <Resource selectId="resourceId"/>
                 <div className='ErrorDiv'><span>{error}</span></div>
                 <button onClick={save}>OK</button>
             </form>
@@ -48,12 +46,14 @@ function Booking(){
     {
         var id = document.querySelector(".resourceEdit input[name=id]").value;
         var resourceId = document.querySelector(".resourceEdit input[name=resourceId]").value;
-        var userId = document.querySelector(".resourceEdit textarea[name=userId]").value;
+        //var userId = document.querySelector(".resourceEdit textarea[name=userId]").value;
+        var userId = id;
         var beginDate = document.querySelector(".resourceEdit input[name=beginDate]").value;
         var endDate = document.querySelector(".resourceEdit input[name=endDate]").value;
-        var rented = document.querySelector(".resourceEdit input[name=rented]").value;
-        var returned = document.querySelector(".resourceEdit input[name=returned]").value;
-        var canceled = document.querySelector(".resourceEdit input[name=canceled]").value;
+        //var rented = document.querySelector(".resourceEdit input[name=rented]").value;
+        var rented, returned, canceled;
+        //var returned = document.querySelector(".resourceEdit input[name=returned]").value;
+        //var canceled = document.querySelector(".resourceEdit input[name=canceled]").value;
     
         if (id == 0) {
             fetch("https://localhost:7089/api/BookingItems", {   
