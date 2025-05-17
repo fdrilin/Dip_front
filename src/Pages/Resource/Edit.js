@@ -3,6 +3,7 @@ import { findAllByTitle } from '@testing-library/react';
 import './Main.css';
 import React, { useState, useEffect } from "react";
 import { useLoaderData, useParams } from 'react-router-dom';
+import getToken from '../../components/AuthFunctions';
 
 function Resource(){
     const resourceId = useLoaderData();
@@ -46,12 +47,45 @@ function Resource(){
         var description = document.querySelector(".resourceEdit textarea[name=description]").value;
         var serialNo = document.querySelector(".resourceEdit input[name=serialNo]").value;
         var available = document.querySelector(".resourceEdit input[name=available]").value;
+
+        let body = { title: title, description: description, serialno: serialNo, available: available };
+        let method = 'Post';
+        let url = "https://localhost:7089/api/ResourceItems";
+        if (id > 0) 
+        {
+            method = 'Put';
+            body.id = id;
+            url += "/" + id.toString();
+        }
+
+        fetch(url, {   
+            method: method,       
+            crossorigin: true,
+            headers: { 
+                'Content-Type': 'application/json' ,
+                "Authorization": getToken()
+            },
+            body: JSON.stringify(body)
+            })
+            .then(res => {
+                let data = res.json();
+                if (res.status === 200) {
+                    setError("saved successfully");    
+                } else {
+                    data.then(res => setError(res.message));                        
+                }
+            })
+            //.then(res => console.log(res))
+            .catch(_ => console.log(_));
     
-        if (id == 0) {
+        /*if (id == 0) {
             fetch("https://localhost:7089/api/ResourceItems", {   
                 method: 'Post',       
                 crossorigin: true,
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json' ,
+                    "Authorization": getToken()
+                },
                 body: JSON.stringify({ title: title, description: description, serialno: serialNo, available: available })
                 })
                 .then(res => {
@@ -68,13 +102,16 @@ function Resource(){
             fetch("https://localhost:7089/api/ResourceItems/" + id.toString(), {   
                 method: 'Put',       
                 crossorigin: true,
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json' ,
+                    "Authorization": getToken()
+                },
                 body: JSON.stringify({ id: id, title: title, description: description, serialno: serialNo, available: available})
                 })
                 .then(res => res.json())
                 //.then(res => setResources(res))
                 .catch(_ => console.log(_));
-        }
+        }*/
     }
         
 }

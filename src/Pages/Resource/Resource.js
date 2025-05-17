@@ -3,6 +3,7 @@ import { eventWrapper } from '@testing-library/user-event/dist/utils';
 import './Main.css';
 import React, { useState, useEffect } from "react";
 import TableMain from "../../components/TableMain.js";
+import getToken, { isAdmin } from '../../components/AuthFunctions.js';
 
 function Resource(props){
     const [filename, setFilename] = React.useState(null);
@@ -11,10 +12,20 @@ function Resource(props){
     useEffect(() => {
     if (filename) {
         fetch(filename, {   
-            method: 'GET',       
-            crossorigin: true,    
+                headers: {
+                    "Authorization": getToken()
+                },
+                method: 'GET',       
+                crossorigin: true,    
             })
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok)
+                    {
+                        setResources([]);
+                        throw new Error("blocked");
+                    }
+                    return res.json();
+            })
             .then(res => setResources(res))
             .catch(_ => console.log(_));
     }
@@ -30,7 +41,7 @@ function Resource(props){
             <form className='resourceFilter' onSubmit={(e)=>{e.preventDefault();}}>
                 <div className='searchDiv'><label><span>Search: </span><input name="search"/></label></div>
             </form>
-            <TableMain columns = {columns} data={resources} url='resource' selectId={props.selectId}/>
+            <TableMain columns = {columns} data={resources} url='resource' selectId={props.selectId} editable={isAdmin()}/>
             <br/>
             <button id = "btnLoad" onClick={(event) => {
                 let url = "https://localhost:7089/api/ResourceItems";
@@ -40,7 +51,9 @@ function Resource(props){
                 }
                 setFilename(url);
             }} >load</button>
-            <a href="resource/0">add</a>
+            { isAdmin() &&
+                <a href="resource/0">add</a>
+            }
         </div>
     );
 }

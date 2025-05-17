@@ -55,7 +55,33 @@ function Booking(){
         //var returned = document.querySelector(".resourceEdit input[name=returned]").value;
         //var canceled = document.querySelector(".resourceEdit input[name=canceled]").value;
     
-        if (id == 0) {
+        let body = { resourceId: resourceId, userId: userId, beginDate: beginDate, endDate: endDate, rented: rented, returned: returned, canceled: canceled };
+        let method = 'Post';
+        let url = "https://localhost:7089/api/BookingItems";
+        if (id > 0) 
+        {
+            method = 'Put';
+            body.id = id;
+            url += "/" + id.toString();
+        }
+        fetch(url, {   
+                method: method,       
+                crossorigin: true,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify( body )
+                })
+                .then(res => {
+                    let data = res.json();
+                    if (res.status === 200) {
+                        setError("saved successfully");    
+                    } else {
+                        data.then(res => setError(res.message));                        
+                    }
+                })
+                //.then(res => console.log(res))
+                .catch(_ => console.log(_));
+
+        /*if (id == 0) {
             fetch("https://localhost:7089/api/BookingItems", {   
                 method: 'Post',       
                 crossorigin: true,
@@ -82,7 +108,7 @@ function Booking(){
                 .then(res => res.json())
                 //.then(res => setResources(res))
                 .catch(_ => console.log(_));
-        }
+        }*/
     }
         
 }

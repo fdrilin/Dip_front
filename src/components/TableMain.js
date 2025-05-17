@@ -1,5 +1,6 @@
 //import
 import React, { useState, useEffect } from "react";
+import { isAdmin } from "./AuthFunctions";
 
 function TableMain(props) {
     let definitions = props.data;
@@ -16,14 +17,16 @@ return(
             </thead>
             <tbody>
                 {definitions.map((item, idx) => 
-                <tr key={item.id.toString()} onClick={(e) => { e.preventDefault(); selectItem(item.id, props.selectId); }}>
+                <tr key={item.id.toString()} onClick={(e) => { selectItem(item.id, props.selectId); }}>
                     {columns.map((col, colIdx) =>
                         <td key = {idx.toString() + '-' + colIdx.toString()} >{item[col]}</td>
                     )}
-                    <td>
-                        <a href={props.url + "/" + item.id}>edit</a>
-                        <a href="#" onClick={(e) => { e.preventDefault(); deleteItem(item.id, props.url); }}>delete</a>
-                    </td>
+                    { props.editable && 
+                        <td>
+                            <a href={props.url + "/" + item.id}>edit</a>
+                            <a href="#" onClick={(e) => { e.preventDefault(); deleteItem(item.id, props.url); }}>delete</a>
+                        </td>
+                    }  
                 </tr>
                 )}
             </tbody>
@@ -52,7 +55,11 @@ function deleteItem(id, url)
 
 function selectItem(id, selectId) 
 {
-    document.getElementById(selectId).value = id;
+    let el = document.getElementById(selectId);
+    if (el) 
+    {    
+        el.value = id;
+    }
 }
 
 export default TableMain;
