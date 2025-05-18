@@ -18,3 +18,7 @@ p{
     color: rgb(138,138,138);
     font-size: 20px;
 }
+
+tr.active {
+    background-color: lightblue;
+}

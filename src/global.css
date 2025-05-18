@@ -26,3 +26,7 @@ table, td, th {
     border-collapse: collapse;
     padding: 5px;
 }
+
+.inline {
+    display: inline;
+}

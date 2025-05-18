@@ -37,20 +37,21 @@ function Resource(props){
 
     return(
         <div className="resourceMain">
-            <h2>Resource</h2>
-            <form className='resourceFilter' onSubmit={(e)=>{e.preventDefault();}}>
-                <div className='searchDiv'><label><span>Search: </span><input name="search"/></label></div>
-            </form>
+            {/*<h2>Resource</h2>*/}
+            <caption>Resource</caption>
+            <div className='searchDiv'>
+                <label><span>Search: </span><input name="search"/></label>
+                <button id = "btnLoad" onClick={(event) => {
+                    let url = "https://localhost:7089/api/ResourceItems";
+                    let search =  document.querySelector(".searchDiv input[name=search]").value;
+                    if (search) {
+                        url += "?search=" + search;
+                    }
+                    setFilename(url);
+                }} >load</button>
+            </div>
             <TableMain columns = {columns} data={resources} url='resource' selectId={props.selectId} editable={isAdmin()}/>
             <br/>
-            <button id = "btnLoad" onClick={(event) => {
-                let url = "https://localhost:7089/api/ResourceItems";
-                let search =  document.querySelector(".resourceFilter input[name=search]").value;
-                if (search) {
-                    url += "?search=" + search;
-                }
-                setFilename(url);
-            }} >load</button>
             { isAdmin() &&
                 <a href="resource/0">add</a>
             }

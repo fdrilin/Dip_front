@@ -17,7 +17,7 @@ return(
             </thead>
             <tbody>
                 {definitions.map((item, idx) => 
-                <tr key={item.id.toString()} onClick={(e) => { selectItem(item.id, props.selectId); }}>
+                <tr key={item.id.toString()} onClick={(e) => { selectItem(e, item.id, props.selectId); }}>
                     {columns.map((col, colIdx) =>
                         <td key = {idx.toString() + '-' + colIdx.toString()} >{item[col]}</td>
                     )}
@@ -53,12 +53,15 @@ function deleteItem(id, url)
         .catch(_ => console.log(_));
 }
 
-function selectItem(id, selectId) 
+function selectItem(e, id, selectId) 
 {
-    let el = document.getElementById(selectId);
-    if (el) 
+    e.currentTarget.closest("table").querySelectorAll("tr").forEach(row => row.classList.remove("active"));
+    e.currentTarget.classList.add("active");
+
+    let idEl = document.getElementById(selectId);
+    if (idEl) 
     {    
-        el.value = id;
+        idEl.value = id;
     }
 }
 

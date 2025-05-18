@@ -28,7 +28,6 @@ function Booking(){
     return(
         <div className="bookingEdit">
             <h2>EDIT</h2>
-
             <form onSubmit={(e)=>{e.preventDefault();}}>
                 {/*Needs fetch to function properly*/}
                 <input type = "hidden" name="id" defaultValue={resourceId}/>
@@ -37,7 +36,7 @@ function Booking(){
                 <div className='resourceId'><label><span>resource id</span><input id="resourceId" name="resourceId" defaultValue={resource.resourceId}/></label></div>
                 <Resource selectId="resourceId"/>
                 <div className='ErrorDiv'><span>{error}</span></div>
-                <button onClick={save}>OK</button>
+                <button onClick={save}>save</button>
             </form>
         </div>
     );
@@ -47,7 +46,6 @@ function Booking(){
         var id = document.querySelector(".resourceEdit input[name=id]").value;
         var resourceId = document.querySelector(".resourceEdit input[name=resourceId]").value;
         //var userId = document.querySelector(".resourceEdit textarea[name=userId]").value;
-        var userId = id;
         var beginDate = document.querySelector(".resourceEdit input[name=beginDate]").value;
         var endDate = document.querySelector(".resourceEdit input[name=endDate]").value;
         //var rented = document.querySelector(".resourceEdit input[name=rented]").value;
@@ -55,7 +53,7 @@ function Booking(){
         //var returned = document.querySelector(".resourceEdit input[name=returned]").value;
         //var canceled = document.querySelector(".resourceEdit input[name=canceled]").value;
     
-        let body = { resourceId: resourceId, userId: userId, beginDate: beginDate, endDate: endDate, rented: rented, returned: returned, canceled: canceled };
+        let body = { resourceId: resourceId, beginDate: beginDate, endDate: endDate, rented: rented, returned: returned, canceled: canceled };
         let method = 'Post';
         let url = "https://localhost:7089/api/BookingItems";
         if (id > 0) 

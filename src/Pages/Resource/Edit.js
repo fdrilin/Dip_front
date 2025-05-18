@@ -35,7 +35,7 @@ function Resource(){
                 <div className='serialNoDiv'><label><span>serial number</span><input name="serialNo" defaultValue={resource.serialNo}/></label></div>
                 <div className='availableDiv'><label><span>available</span><input name="available" defaultValue={resource.available}/></label></div>
                 <div className='ErrorDiv'><span>{error}</span></div>
-                <button onClick={save}>OK</button>
+                <button onClick={save}>save</button>
             </form>
         </div>
     );
