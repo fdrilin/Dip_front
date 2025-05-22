@@ -39,8 +39,8 @@ const router = createBrowserRouter(
         <Route path='resource' element={<Resource/>}/>
         <Route path='resource/:id' loader={idLoader} element={<ResourceEdit/>}/>
         <Route path='about' element={<About/>}/>
-        <Route path='users' loader={getUsers} element={<Users/>}/>
-        <Route path='users/:userId' loader={loader} element={<UserEdit/>} errorElement={<ErrorPage/>}/>
+        <Route path='user' loader={getUsers} element={<Users/>}/>
+        <Route path='user/:userId' loader={loader} element={<UserEdit/>} errorElement={<ErrorPage/>}/>
         <Route path='login' element={<LoginPage/>}/>
         <Route path='register' element={<RegisterPage/>}/>
         <Route path='*' element={<ErrorPage/>} />

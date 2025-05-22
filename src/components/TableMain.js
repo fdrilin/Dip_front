@@ -1,54 +1,92 @@
 //import
 import React, { useState, useEffect } from "react";
-import { isAdmin } from "./AuthFunctions";
+import getToken, { isAdmin } from "./AuthFunctions";
 
 function TableMain(props) {
-    let definitions = props.data;
     let columns = props.columns;
+    let name = props.name;
+    let checkboxFields = props.checkboxFields;
+    if (!checkboxFields)
+    {
+        checkboxFields = new Array(columns.length).fill("");
+    }
+
+    const [definitions, setData] = useState([]);
 
 return(
-        <table>
-            <thead>
-                <tr>
-                    {columns.map((item, idx) => 
-                        <th key = {idx.toString()}>{item}</th>
+        <div>
+            <div className='searchDiv'>
+                <label><span>Search: </span><input name="search"/></label>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        {columns.map((item, idx) => 
+                            <th key = {idx.toString()}>{item}</th>
+                        )}
+                    </tr>
+                </thead>
+                <tbody>
+                    {definitions.map((item, idx) => 
+                    <tr key={item.id.toString()} onClick={(e) => { selectItem(e, item.id, props.selectId); }}>
+                        {columns.map((col, colIdx) =>
+                            <td key = {idx.toString() + '-' + colIdx.toString()} >
+                            { 
+                                checkboxFields[colIdx] == "" ?
+                                item[col] :
+                                <input type="checkbox" checked={ item[checkboxFields[colIdx]] } onChange={ 
+                                    (e) => 
+                                    { 
+                                        update(e.target, item, props.name, checkboxFields[colIdx], definitions);
+                                    }
+                                }/>
+                            }
+                            </td>
+                        )}
+                        { props.editable && 
+                            <td>
+                                <a href={props.name + "/" + item.id}>edit</a>
+                                <a href="#" onClick={(e) => { e.preventDefault(); deleteItem(item.id, props.name); }}>delete</a>
+                            </td>
+                        }  
+                    </tr>
                     )}
-                </tr>
-            </thead>
-            <tbody>
-                {definitions.map((item, idx) => 
-                <tr key={item.id.toString()} onClick={(e) => { selectItem(e, item.id, props.selectId); }}>
-                    {columns.map((col, colIdx) =>
-                        <td key = {idx.toString() + '-' + colIdx.toString()} >
-                        { 
-                            props.checkboxFields[colIdx] == "" ?
-                            item[col] :
-                            <input type="checkbox" checked={ item[props.checkboxFields[colIdx]] } onChange={ 
-                                (e) => 
-                                { 
-                                    update(e.target, item, props.url, props.checkboxFields[colIdx], definitions);
-                                }
-                            }/>
-                        }
-                        </td>
-                    )}
-                    { props.editable && 
-                        <td>
-                            <a href={props.url + "/" + item.id}>edit</a>
-                            <a href="#" onClick={(e) => { e.preventDefault(); deleteItem(item.id, props.url); }}>delete</a>
-                        </td>
-                    }  
-                </tr>
-                )}
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+            <button id = "btnLoad" onClick={(event) => {
+                    let url = "https://localhost:7089/api/" + name +"Items";
+                    let search =  document.querySelector(".searchDiv input[name=search]").value;
+                    if (search) {
+                        url += "?search=" + search;
+                    }
+                    load(url, setData);
+                }} >load</button>
+            <a href={ name + "/0" }>add</a>
+        </div>
     )
 }
 
-class CheckboxFiller
+function load(filename, setData)
 {
-    isFirstTime = true;
-    return
+    if (filename) {
+        fetch(filename, {   
+            headers: {
+                "Authorization": getToken()
+            },
+            method: 'GET',       
+            crossorigin: true,    
+        })
+        .then(res => {
+            if (!res.ok)
+                {
+                    setData([]);
+                    throw new Error("blocked");
+                }
+                return res.json();
+        })
+        .then(res => setData(res))
+        .catch(_ => console.log(_));
+    }
 }
 
 function deleteItem(id, url) 
