@@ -56,14 +56,14 @@ function Booking(){
         let body = { resourceId: resourceId, beginDate: beginDate, endDate: endDate, rented: rented, returned: returned, canceled: canceled };
         let method = 'Post';
         let url = "https://localhost:7089/api/BookingItems";
-        if (id > 0) 
+        if (id > 0)
         {
             method = 'Put';
             body.id = id;
             url += "/" + id.toString();
         }
-        fetch(url, {   
-                method: method,       
+        fetch(url, {
+                method: method,
                 crossorigin: true,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify( body )
@@ -71,17 +71,17 @@ function Booking(){
                 .then(res => {
                     let data = res.json();
                     if (res.status === 200) {
-                        setError("saved successfully");    
+                        setError("saved successfully");
                     } else {
-                        data.then(res => setError(res.message));                        
+                        data.then(res => setError(res.message));
                     }
                 })
                 //.then(res => console.log(res))
                 .catch(_ => console.log(_));
 
         /*if (id == 0) {
-            fetch("https://localhost:7089/api/BookingItems", {   
-                method: 'Post',       
+            fetch("https://localhost:7089/api/BookingItems", {
+                method: 'Post',
                 crossorigin: true,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ resourceId: resourceId, userId: userId, beginDate: beginDate, endDate: endDate, rented: rented, returned: returned, canceled: canceled })
@@ -89,9 +89,9 @@ function Booking(){
                 .then(res => {
                     let data = res.json();
                     if (res.status === 200) {
-                        setError("saved successfully");    
+                        setError("saved successfully");
                     } else {
-                        data.then(res => setError(res.message));                        
+                        data.then(res => setError(res.message));
                     }
                 })
                 //.then(res => console.log(res))

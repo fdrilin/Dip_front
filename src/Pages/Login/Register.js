@@ -4,7 +4,7 @@ import './Main.css';
 import React, { useState, useEffect } from "react";
 import { useLoaderData, useParams } from 'react-router-dom';
 
-function Login(){
+function Register(){
     const [error, setError] = useState([]);
 
     return(
@@ -14,9 +14,10 @@ function Login(){
                 {/*Needs fetch to function properly*/}
                 <div className='login'><label><span>login</span><input name="login"/></label></div>
                 <div className='password'><label><span>password</span><input name="password"/></label></div>
+                <div className='name'><label><span>name</span><input name="name"/></label></div>
+                <div className='email'><label><span>email</span><input name="email"/></label></div>
                 <div className='ErrorDiv'><span>{error}</span></div>
                 <button onClick={save}>OK</button>
-                <a href="register">register</a>
             </form>
         </div>
     );
@@ -25,12 +26,14 @@ function Login(){
     {
         var login = document.querySelector(".loginForm input[name=login]").value;
         var password = document.querySelector(".loginForm input[name=password]").value;
+        var name = document.querySelector(".loginForm input[name=name]").value;
+        var email = document.querySelector(".loginForm input[name=email]").value;
         
-        fetch("https://localhost:7089/api/Auth", {   
+        fetch("https://localhost:7089/api/Auth/register", {   
             method: 'Post',       
             crossorigin: true,
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ login: login, password: password })
+            body: JSON.stringify({ login: login, password: password, name: name, email: email })
             })
             .then(res => {
                 let data = res.json();
@@ -46,4 +49,4 @@ function Login(){
     }  
 }
 
-export default Login;
+export default Register;

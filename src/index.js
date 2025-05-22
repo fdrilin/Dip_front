@@ -12,12 +12,13 @@ import Booking from './Pages/Booking/Booking';
 import Resource from './Pages/Resource/Resource';
 import About from './Pages/About/About';
 import Users from './Pages/Users/Users';
-import UserPage from './Pages/Users/UserPage';
+import UserEdit from './Pages/Users/Edit';
 import './global.css';
 import ErrorPage from './Pages/Error/Error';
 import ResourceEdit from './Pages/Resource/Edit'
 import BookingEdit from './Pages/Booking/Edit'
 import LoginPage from './Pages/Login/Login'
+import RegisterPage from './Pages/Login/Register'
 
 const Root = () =>{
 return(
@@ -39,8 +40,9 @@ const router = createBrowserRouter(
         <Route path='resource/:id' loader={idLoader} element={<ResourceEdit/>}/>
         <Route path='about' element={<About/>}/>
         <Route path='users' loader={getUsers} element={<Users/>}/>
-        <Route path='users/:userId' loader={loader} element={<UserPage/>} errorElement={<ErrorPage/>}/>
+        <Route path='users/:userId' loader={loader} element={<UserEdit/>} errorElement={<ErrorPage/>}/>
         <Route path='login' element={<LoginPage/>}/>
+        <Route path='register' element={<RegisterPage/>}/>
         <Route path='*' element={<ErrorPage/>} />
     </Route>
    ) 

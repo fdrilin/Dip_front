@@ -1,7 +1,7 @@
 import './Main.css';
 import React, { useState, useEffect } from "react";
 import TableMain from "../../components/TableMain.js";
-import getToken from '../../components/AuthFunctions.js';
+import getToken, { isAdmin } from '../../components/AuthFunctions.js';
 
 function Booking(){
     const [filename, setFilename] = React.useState(null);
@@ -29,7 +29,11 @@ function Booking(){
     }
     }, [filename]); 
 
-    let columns = ['id', 'beginDate', 'endDate', 'rented', 'returned', 'canceled'];
+    let columns = ['id', 'beginDate', 'endDate', 'canceled'];
+    if (isAdmin())
+    {
+        columns.push('rented', 'returned');
+    }
 
     return(
         <div className="Main">
@@ -37,7 +41,7 @@ function Booking(){
             <form className='bookingFilter' onSubmit={(e)=>{e.preventDefault();}}>
                 <div className='searchDiv'><label><span>Search: </span><input name="search"/></label></div>
             </form>
-            <TableMain columns = {columns} data={bookings} url="booking" editable={true}/>
+            <TableMain columns = {columns} data={bookings} url="booking" editable={true} checkboxFields={["","","","canceled","rented","returned"]}/> 
             <button id = "btnLoad" onClick={(event) => {
                 let url = "https://localhost:7089/api/BookingItems";
                 let search =  document.querySelector(".bookingFilter input[name=search]").value;
