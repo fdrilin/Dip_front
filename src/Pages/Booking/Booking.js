@@ -7,28 +7,6 @@ function Booking(){
     const [filename, setFilename] = React.useState(null);
     const [bookings, setBookings] = useState([]);
 
-    useEffect(() => {
-        if (filename) {
-            fetch(filename, {   
-                headers: {
-                    "Authorization": getToken()
-                },
-                method: 'GET',       
-                crossorigin: true,    
-            })
-            .then(res => {
-                if (!res.ok)
-                    {
-                        setBookings([]);
-                        throw new Error("blocked");
-                    }
-                    return res.json();
-            })
-            .then(res => setBookings(res))
-            .catch(_ => console.log(_));
-    }
-    }, [filename]); 
-
     let columns = ['id', 'beginDate', 'endDate', 'canceled'];
     if (isAdmin())
     {
@@ -48,11 +26,34 @@ function Booking(){
                 if (search) {
                     url += "?search=" + search;
                 }
-                setFilename(url);
+                load(url, setBookings);
             }} >load</button>
             <a href="booking/0">add</a>
         </div>
     );
+}
+
+function load(filename, setBookings)
+{
+    if (filename) {
+        fetch(filename, {   
+            headers: {
+                "Authorization": getToken()
+            },
+            method: 'GET',       
+            crossorigin: true,    
+        })
+        .then(res => {
+            if (!res.ok)
+                {
+                    setBookings([]);
+                    throw new Error("blocked");
+                }
+                return res.json();
+        })
+        .then(res => setBookings(res))
+        .catch(_ => console.log(_));
+    }
 }
 
 export default Booking;

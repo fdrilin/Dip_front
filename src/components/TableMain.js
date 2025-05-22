@@ -103,6 +103,7 @@ function fetchSingle(item, url, field, value, )
                 console.log(field + " update success");
                 item[field] = value;
                 console.log(item);
+                document.getElementById("btnLoad").click();
             } else {
                 data.then(res => alert(res.message));
             }
