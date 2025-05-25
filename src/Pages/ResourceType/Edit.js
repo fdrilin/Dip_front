@@ -4,23 +4,30 @@ import './Main.css';
 import React, { useState, useEffect } from "react";
 import { useLoaderData, useParams } from 'react-router-dom';
 import getToken from '../../components/AuthFunctions';
+import { getTagEls, getTagValues } from '../../components/TableMain';
+import { formTagList } from './ResourceType';
 
 function Resource(){
     const resourceId = useLoaderData();
 
     const [resource, setResource] = useState({title: "", description: ""});
     const [error, setError] = useState([]);
+    const [ready, setReady] = useState(false);
 
     useEffect(() => {
         if (resource.title === "" && resourceId != 0) {
             resource.title = "loading";
-            fetch("https://localhost:7089/api/ResourceItems/" + resourceId.toString(), {   
+            fetch("https://localhost:7089/api/ResourceTypeItems/" + resourceId.toString(), {   
                 method: 'GET',       
-                crossorigin: true,    
+                crossorigin: true,
                 })
                 .then(res => res.json())
-                .then(res => setResource(res))
+                .then(res => {setResource(res); setReady(true)})
                 .catch(_ => console.log(_));
+        }
+        else 
+        {
+            setReady(true);
         }
     }, [resource]);
 
@@ -32,8 +39,8 @@ function Resource(){
                 <input type = "hidden" name="id" defaultValue={resourceId}/>
                 <div className='titleDiv'><label><span>title</span><input name="title" defaultValue={resource.title}/></label></div>
                 <div className='descriptionDiv'><label><span>description</span><textarea defaultValue={resource.description} name="description"/></label></div>
-                <div className='serialNoDiv'><label><span>serial number</span><input name="serialNo" defaultValue={resource.serialNo}/></label></div>
-                <div className='availableDiv'><label><span>available</span><input name="available" defaultValue={resource.available}/></label></div>
+                <div className='softwareDiv'><label><span>software</span><input name="software" defaultValue={resource.software}/></label></div>
+                { ready && getTagEls(formTagList(), !resource.tags ? [] : resource.tags.split(","))}
                 <div className='ErrorDiv'><span>{error}</span></div>
                 <button onClick={save}>save</button>
             </form>
@@ -45,12 +52,12 @@ function Resource(){
         var id = document.querySelector(".resourceEdit input[name=id]").value;
         var title = document.querySelector(".resourceEdit input[name=title]").value;
         var description = document.querySelector(".resourceEdit textarea[name=description]").value;
-        var serialNo = document.querySelector(".resourceEdit input[name=serialNo]").value;
-        var available = document.querySelector(".resourceEdit input[name=available]").value;
+        var software = document.querySelector(".resourceEdit input[name=software]").value;
+        var tags = getTagValues().join(",");
 
-        let body = { title: title, description: description, serialno: serialNo, available: available };
+        let body = { title: title, description: description, software: software, tags: tags };
         let method = 'Post';
-        let url = "https://localhost:7089/api/ResourceItems";
+        let url = "https://localhost:7089/api/ResourceTypeItems";
         if (id > 0) 
         {
             method = 'Put';
@@ -77,41 +84,6 @@ function Resource(){
             })
             //.then(res => console.log(res))
             .catch(_ => console.log(_));
-    
-        /*if (id == 0) {
-            fetch("https://localhost:7089/api/ResourceItems", {   
-                method: 'Post',       
-                crossorigin: true,
-                headers: { 
-                    'Content-Type': 'application/json' ,
-                    "Authorization": getToken()
-                },
-                body: JSON.stringify({ title: title, description: description, serialno: serialNo, available: available })
-                })
-                .then(res => {
-                    let data = res.json();
-                    if (res.status === 200) {
-                        setError("saved successfully");    
-                    } else {
-                        data.then(res => setError(res.message));                        
-                    }
-                })
-                //.then(res => console.log(res))
-                .catch(_ => console.log(_));
-        } else {
-            fetch("https://localhost:7089/api/ResourceItems/" + id.toString(), {   
-                method: 'Put',       
-                crossorigin: true,
-                headers: { 
-                    'Content-Type': 'application/json' ,
-                    "Authorization": getToken()
-                },
-                body: JSON.stringify({ id: id, title: title, description: description, serialno: serialNo, available: available})
-                })
-                .then(res => res.json())
-                //.then(res => setResources(res))
-                .catch(_ => console.log(_));
-        }*/
     }
         
 }

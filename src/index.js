@@ -19,6 +19,8 @@ import ResourceEdit from './Pages/Resource/Edit'
 import BookingEdit from './Pages/Booking/Edit'
 import LoginPage from './Pages/Login/Login'
 import RegisterPage from './Pages/Login/Register'
+import ResourceType from './Pages/ResourceType/ResourceType'
+import ResourceTypeEdit from './Pages/ResourceType/Edit'
 
 const Root = () =>{
 return(
@@ -33,11 +35,13 @@ return(
 const router = createBrowserRouter(
    createRoutesFromElements(
     <Route path='/' element={<Root />}>
-        <Route index element={<Home/>}/>
+        <Route index element={<ResourceType style="card"/>}/>
         <Route path='booking' element={<Booking/>}/>
         <Route path='booking/:id' loader={idLoader} element={<BookingEdit/>}/>
         <Route path='resource' element={<Resource/>}/>
         <Route path='resource/:id' loader={idLoader} element={<ResourceEdit/>}/>
+        <Route path='resourceType' element={<ResourceType/>}/>
+        <Route path='resourceType/:id' loader={idLoader} element={<ResourceTypeEdit/>}/>
         <Route path='about' element={<About/>}/>
         <Route path='user' loader={getUsers} element={<Users/>}/>
         <Route path='user/:userId' loader={loader} element={<UserEdit/>} errorElement={<ErrorPage/>}/>
@@ -51,6 +55,11 @@ const router = createBrowserRouter(
 function idLoader({params}) {
     //add fetch here
     return params.id;
+}
+
+function loadTrue() {
+    //add fetch here
+    return true;
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

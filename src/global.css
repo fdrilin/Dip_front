@@ -30,3 +30,15 @@ table, td, th {
 .inline {
     display: inline;
 }
+
+.card {
+    border: 3px solid silver;
+    float: left;
+    margin-right: 15px;
+    margin-bottom: 15px;
+    width: 30%;
+}
+
+.clear-fix {
+    clear: both;
+}

@@ -78,35 +78,6 @@ function Booking(){
                 })
                 //.then(res => console.log(res))
                 .catch(_ => console.log(_));
-
-        /*if (id == 0) {
-            fetch("https://localhost:7089/api/BookingItems", {
-                method: 'Post',
-                crossorigin: true,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ resourceId: resourceId, userId: userId, beginDate: beginDate, endDate: endDate, rented: rented, returned: returned, canceled: canceled })
-                })
-                .then(res => {
-                    let data = res.json();
-                    if (res.status === 200) {
-                        setError("saved successfully");
-                    } else {
-                        data.then(res => setError(res.message));
-                    }
-                })
-                //.then(res => console.log(res))
-                .catch(_ => console.log(_));
-        } else {
-            fetch("https://localhost:7089/api/BookingItems/" + id.toString(), {   
-                method: 'Put',       
-                crossorigin: true,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id: id, resourceId: resourceId, userId: userId, beginDate: beginDate, endDate: endDate, rented: rented, returned: returned, canceled: canceled })
-                })
-                .then(res => res.json())
-                //.then(res => setResources(res))
-                .catch(_ => console.log(_));
-        }*/
     }
         
 }
