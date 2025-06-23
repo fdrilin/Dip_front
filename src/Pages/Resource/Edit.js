@@ -1,22 +1,21 @@
 //import {Link} from 'react-router-dom';
-import { findAllByTitle } from '@testing-library/react';
-import './Main.css';
 import React, { useState, useEffect } from "react";
-import { useLoaderData, useParams } from 'react-router-dom';
-import getToken from '../../components/AuthFunctions';
+import { useLoaderData, useSearchParams } from 'react-router-dom';
+import getToken, { isAdmin } from '../../components/AuthFunctions';
+import TableMain from '../../components/TableMain';
 
-function Resource(){
+function Resource(props){
     const resourceId = useLoaderData();
-
-    const [resource, setResource] = useState({title: "", description: ""});
+    
+    const [resource, setResource] = useState({resourceTypeId: ""});
     const [error, setError] = useState([]);
 
     useEffect(() => {
-        if (resource.title === "" && resourceId != 0) {
-            resource.title = "loading";
-            fetch("https://localhost:7089/api/ResourceItems/" + resourceId.toString(), {   
-                method: 'GET',       
-                crossorigin: true,    
+        if (resource.resourceTypeId == "" && resourceId != 0) {
+            console.log("loading");
+            fetch("https://localhost:7089/api/ResourceItems/" + resourceId.toString(), {
+                method: 'GET',
+                crossorigin: true,
                 })
                 .then(res => res.json())
                 .then(res => setResource(res))
@@ -24,31 +23,39 @@ function Resource(){
         }
     }, [resource]);
 
+    let columns = ['id', 'title', 'description', 'software', 'tags', 'available'];
+    let checkboxFields = ['', '', '', '', '', ''];
+    console.log(props);
+
     return(
-        <div className="resourceEdit">
-            <h2>EDIT</h2>
-            <form onSubmit={(e)=>{e.preventDefault();}}>
-                {/*Needs fetch to function properly*/}
-                <input type = "hidden" name="id" defaultValue={resourceId}/>
-                <div className='titleDiv'><label><span>title</span><input name="title" defaultValue={resource.title}/></label></div>
-                <div className='descriptionDiv'><label><span>description</span><textarea defaultValue={resource.description} name="description"/></label></div>
-                <div className='serialNoDiv'><label><span>serial number</span><input name="serialNo" defaultValue={resource.serialNo}/></label></div>
-                <div className='availableDiv'><label><span>available</span><input name="available" defaultValue={resource.available}/></label></div>
-                <div className='ErrorDiv'><span>{error}</span></div>
-                <button onClick={save}>save</button>
-            </form>
+        <div className="Main">
+            <div className='formEdit'>
+            <h2>Техніка</h2>
+                <form onSubmit={(e)=>{e.preventDefault();}}>
+                    {/*Needs fetch to function properly*/}
+                    <input type = "hidden" name="id" defaultValue={resourceId}/>
+                    <label className='labelInput'>Серійний номер</label><input name="serialNo" defaultValue={resource.serialNo}/>
+                    <label className='labelInput'>Доступність</label><span><input type="checkbox" name="available" defaultChecked={resource.available}/></span>
+                    <input hidden id="selectId" name="resourceTypeId" defaultValue={resource.resourceTypeId}/>
+                    {console.log(document.getElementById("selectId"))}
+                    <TableMain columns = {columns} name="resourceType" editable={false} checkboxFields={checkboxFields} selectId={"selectId"}/> 
+                    <div className='ErrorDiv'><span>{error}</span></div>
+                    <button className='button-save' onClick={(e) => {save();}}>save</button>
+                </form>
+            </div>
         </div>
     );
 
     function save() 
     {
-        var id = document.querySelector(".resourceEdit input[name=id]").value;
-        var title = document.querySelector(".resourceEdit input[name=title]").value;
-        var description = document.querySelector(".resourceEdit textarea[name=description]").value;
-        var serialNo = document.querySelector(".resourceEdit input[name=serialNo]").value;
-        var available = document.querySelector(".resourceEdit input[name=available]").value;
+        console.log("saving");
+        var id = document.querySelector(".formEdit input[name=id]").value;
+        var serialNo = document.querySelector(".formEdit input[name=serialNo]").value;
+        var available = +document.querySelector(".formEdit input[name=available]").checked;
+        var resourceTypeId = parseInt(document.querySelector(".formEdit input[name=resourceTypeId]").value);
 
-        let body = { title: title, description: description, serialno: serialNo, available: available };
+        let body = { serialno: serialNo, available: available, resourceTypeId: resourceTypeId };
+        console.log(body);
         let method = 'Post';
         let url = "https://localhost:7089/api/ResourceItems";
         if (id > 0) 
@@ -70,48 +77,13 @@ function Resource(){
             .then(res => {
                 let data = res.json();
                 if (res.status === 200) {
-                    setError("saved successfully");    
+                    window.location.href = '/resource';
                 } else {
                     data.then(res => setError(res.message));                        
                 }
             })
             //.then(res => console.log(res))
             .catch(_ => console.log(_));
-    
-        /*if (id == 0) {
-            fetch("https://localhost:7089/api/ResourceItems", {   
-                method: 'Post',       
-                crossorigin: true,
-                headers: { 
-                    'Content-Type': 'application/json' ,
-                    "Authorization": getToken()
-                },
-                body: JSON.stringify({ title: title, description: description, serialno: serialNo, available: available })
-                })
-                .then(res => {
-                    let data = res.json();
-                    if (res.status === 200) {
-                        setError("saved successfully");    
-                    } else {
-                        data.then(res => setError(res.message));                        
-                    }
-                })
-                //.then(res => console.log(res))
-                .catch(_ => console.log(_));
-        } else {
-            fetch("https://localhost:7089/api/ResourceItems/" + id.toString(), {   
-                method: 'Put',       
-                crossorigin: true,
-                headers: { 
-                    'Content-Type': 'application/json' ,
-                    "Authorization": getToken()
-                },
-                body: JSON.stringify({ id: id, title: title, description: description, serialno: serialNo, available: available})
-                })
-                .then(res => res.json())
-                //.then(res => setResources(res))
-                .catch(_ => console.log(_));
-        }*/
     }
         
 }

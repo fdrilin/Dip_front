@@ -5,7 +5,6 @@
 .container {
     max-width: 1600px;
     margin: 0 auto;
-    display: grid;
     grid-template-areas: 
         "head head head"
         "sidebar main main"
@@ -27,6 +26,10 @@ table, td, th {
     padding: 5px;
 }
 
+tr.active {
+    background-color: rgba(5, 253, 117, 0.849) !important;
+}
+
 .inline {
     display: inline;
 }
@@ -41,4 +44,327 @@ table, td, th {
 
 .clear-fix {
     clear: both;
+}
+
+.Header li a {
+    font-size: 20px;
+    color: green;
+    font-weight: bold;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+.Header li a.active {
+    color: black;
+    font-weight: bold;
+}
+.Header nav {
+    width: 80%;
+    float: left;
+}
+.Header .login {
+    margin-top: 5px;
+    width: 10%;
+    font-size: 20px;
+    height: 40px;
+}
+.Header .login a {
+    color: white;
+    text-transform: uppercase;
+}
+.Header {
+    height: 50px;
+    margin-left: 0;
+    margin-right: 0;
+}
+.page-logo img{
+    width: 50px;
+    height: 50px;
+    float: left;
+    margin-right: 40px;
+}
+.Main {
+    background-color: #d1f4d1;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 50px;
+    min-height: 700px;
+}
+.Main h2 {
+    text-align: center;
+    font-size: 50px;
+    color: darkgreen;
+    margin: 0px;
+}
+.Main table {
+    width: 100%;
+    margin-top: 5px;
+}
+
+.searchDiv {
+    width: 100%;
+    margin-bottom: 15px;
+}
+.searchDiv label {
+    width: 100px;
+    display: block;
+    float: left;
+    color: green;
+    font-weight: bold;
+    font-size: 20px;
+    margin-top: 10px;
+    margin-left: 5px;
+}
+.searchDiv input {
+    width: calc(100% - 250px);
+    height: 25px;
+    border-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-right: 10px;
+}
+#btnLoad {
+    margin-top: 5px;
+    width: 100px;
+    font-size: 20px;
+    height: 30px;
+    color: white;
+}
+
+.Main table th {
+    background-color: #2da143;
+}
+.Main table tr:nth-child(2n) {
+    background-color: #a2bba2;
+}
+.Main table input {
+    display: block;
+    margin: 0 auto;
+}
+
+input[type="checkbox"] {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid green;
+    border-radius: 5px;
+    background-color: white;
+    cursor: pointer;
+    position: relative;
+}
+
+table input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+}
+
+input[type="checkbox"]:checked {
+    background-color: green;
+    border-color: green;
+}
+
+input[type="checkbox"]:checked::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 6px;
+    height: 6px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+.button-delete {
+    background-color: darkred;
+    border: solid darkred;
+    min-width: 50px;
+}
+.button-edit {
+    background-color: darkblue;
+    border: solid darkblue;
+    min-width: 50px;
+}
+.button-resource {
+    background-color: #aa981d;
+    border: solid #aa981d;
+    min-width: 75px;
+}
+.button-add, .button-save {
+    background-color: darkgreen;
+    border: solid darkgreen;
+    width: 150px;
+    height: 35px;
+    font-size: 20px;
+    margin: 10px auto;
+    display: block;
+    color: white;
+}
+
+button {
+    border-radius: 15px;
+    border: solid darkgreen;
+    background-color: darkgreen;
+}
+
+a button {
+    color: white;
+}
+
+.table-div {
+    max-height: 400px;
+    overflow-y: auto;
+}
+.table-div thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    height: 20px;
+}
+
+.searchDiv .tags {
+    width: calc(100% - 250px);
+    margin: 5px auto 20px auto;
+    display: flex;
+    flex-wrap: wrap; /* чтобы переносились на новую строку при нехватке места */
+    gap: 10px 30px;
+}
+.searchDiv .tags label {
+    width: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+.searchDiv .tags input {
+    align-self: center;
+    margin-top: 10px;
+}
+
+.formEdit {
+    width: 900px;
+    border: 2px solid darkgreen;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.formEdit .labelInput, form .labelTextarea, .formEdit .paramGroup label {
+    width: 150px;
+    font-size: 22px;
+    color: darkgreen;
+    display: inline-block;
+}
+
+.formEdit .labelTextarea {
+    height: 80px;
+    display: flex;
+    align-items: center;
+    float: left;
+}
+.formEdit .paramGroup {
+    display: inline-block;
+    width: calc(100% - 155px);
+}
+
+.formEdit .paramGroup label {
+    width: 80px;
+}
+.formEdit .paramGroup input {
+    width: 100px;
+    margin-right: 40px;
+}
+
+.formEdit input:not([type="checkbox"]) {
+    height: 25px;
+    border-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-right: 10px;
+    margin-bottom: 15px;
+}
+
+.formEdit input[type="checkbox"] {
+    margin-right: 25px;
+}
+
+.formEdit form > input {
+    width: calc(100% - 200px);
+}
+.formEdit textarea {
+    width: calc(100% - 200px);
+    border-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-right: 10px;
+    margin-bottom: 15px;
+    height: 80px;
+}
+.ErrorDiv {
+    width: 100%;
+    padding: 20px 0;
+    font-size: 20px;
+    color: red;
+}
+.cards {
+    display: flex;
+    flex-wrap: wrap;
+    width: calc(100% - 220px);
+    margin: 0 auto;
+    gap: 10px 56px;
+
+}
+.card {
+    display: block;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0;
+    height: 400px;
+    padding: 0;
+}
+.card .image {
+    width: 150px;
+    margin: 0 auto;
+}
+.card .title {
+    font-size: 25px;
+    font-weight: bold;
+    text-align: center;
+    margin: 20px;
+    color: darkgreen;
+}
+.card .software, .card .tags, .card .available {
+    margin: 4px 20px;
+    text-align: center;
+    height: 20px;
+}
+.card .description {
+    margin: 5px 20px 0 20px;
+    text-align: center;
+    height: 40px;
+    color: #153d0d;
+}
+.card .software {
+    color: #153d0d;
+    font-style: italic;
+}
+
+
+.card button {
+    margin: 0 auto;
+    display: block;
+    width: calc(100% - 100px);
+    height: 40px;
+}
+.card button a {
+    font-size: 20px;
+}
+.card .available {
+    font-size: 18px;
+    color: #2da143;
+}
+
+.card .tags {
+    color: grey;
+}
+
+.text-align-center {
+    text-align: center;
 }

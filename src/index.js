@@ -21,15 +21,22 @@ import LoginPage from './Pages/Login/Login'
 import RegisterPage from './Pages/Login/Register'
 import ResourceType from './Pages/ResourceType/ResourceType'
 import ResourceTypeEdit from './Pages/ResourceType/Edit'
+import { Helmet } from 'react-helmet';
 
 const Root = () =>{
-return(
-    <div className='container'>
-            <Header />
-            {/*<Sidebar />*/}
-            <Outlet />
-    </div>
-)
+
+    return(
+        <>
+            <Helmet>
+                <title>Бронювання</title>
+            </Helmet>
+            <div className='container'>
+                    <Header />
+                    {/*<Sidebar />*/}
+                    <Outlet />
+            </div>
+        </>
+    )
 }
 
 const router = createBrowserRouter(
@@ -44,7 +51,7 @@ const router = createBrowserRouter(
         <Route path='resourceType/:id' loader={idLoader} element={<ResourceTypeEdit/>}/>
         <Route path='about' element={<About/>}/>
         <Route path='user' loader={getUsers} element={<Users/>}/>
-        <Route path='user/:userId' loader={loader} element={<UserEdit/>} errorElement={<ErrorPage/>}/>
+        <Route path='user/:id' loader={idLoader} element={<UserEdit/>}/>
         <Route path='login' element={<LoginPage/>}/>
         <Route path='register' element={<RegisterPage/>}/>
         <Route path='*' element={<ErrorPage/>} />
@@ -55,11 +62,6 @@ const router = createBrowserRouter(
 function idLoader({params}) {
     //add fetch here
     return params.id;
-}
-
-function loadTrue() {
-    //add fetch here
-    return true;
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

@@ -1,5 +1,3 @@
-import './Main.css';
-
 function Home(){
     return(
         <div className="Main">

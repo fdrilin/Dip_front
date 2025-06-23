@@ -1,14 +1,13 @@
-import './Main.css';
-
-
 function About(){
     return(
         <div className="Main">
-            <h2>About</h2>
-            <p>React (also known as React.js or ReactJS) is a free and open-source front-end JavaScript library[3] for building user interfaces based on components. It is maintained by Meta (formerly Facebook) and a community of individual developers and companies.[4][5][6]
+            <h2>Про нас</h2>
+            <p>Ми — команда, яка прагне зробити сучасну комп’ютерну техніку доступною для кожного у потрібний момент. Наш сервіс оренди створений для тих, хто цінує зручність, швидкість та надійність. Незалежно від того, чи ви студент, фрилансер, представник бізнесу або організатор заходу, ми допоможемо знайти оптимальне технічне рішення саме для вас.</p>
+            <p>
+            Ми пропонуємо лише перевірене обладнання в ідеальному стані та забезпечуємо простий і зрозумілий процес оренди без зайвої бюрократії. Весь процес — від вибору техніки до повернення — відбувається онлайн, швидко та прозоро. Ми дбаємо про те, щоб ви могли зосередитися на своїх справах, а не на технічних труднощах.
             </p>
             <p>
-            React can be used as a base in the development of single-page, mobile, or server-rendered applications with frameworks like Next.js. However, React is only concerned with the user interface and rendering components to the DOM, so creating React applications usually requires the use of additional libraries for routing, as well as certain client-side functionality.
+            Наша команда переконана, що оренда — це не тимчасова заміна, а розумна альтернатива покупці, яка відкриває більше можливостей для роботи, навчання чи реалізації ідей. Ми тут, щоб допомогти вам у цьому.
             </p>
         </div>
     );

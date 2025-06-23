@@ -17,6 +17,12 @@ export function isAdmin()
     return currentUser && currentUser.admin == 1;
 }
 
+export function isLoggedIn()
+{
+    let currentUser = getCurrentUser();
+    return !!currentUser;
+}
+
 function getCurrentUser()
 {
     let currentUser = sessionStorage.getItem("currentUser");

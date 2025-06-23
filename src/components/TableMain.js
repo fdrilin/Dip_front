@@ -1,48 +1,63 @@
-//import
 import React, { useState, useEffect } from "react";
-import getToken, { isAdmin } from "./AuthFunctions";
+import getToken, { isAdmin, isLoggedIn } from "./AuthFunctions";
 
 function TableMain(props) {
     let columns = props.columns;
     let name = props.name;
-    let checkboxFields = props.checkboxFields;
-    if (!checkboxFields)
+    if (!props.checkboxFields)
     {
-        checkboxFields = new Array(columns.length).fill("");
+        props.checkboxFields = new Array(columns.length).fill("");
     }
 
     const [definitions, setData] = useState([]);
+    const [loaded, setLoaded] = useState(false);
+    if (loaded == false) {
+        load(formUrl(name, props.resource_type_id), setData, setLoaded);
+    }
 
 return(
         <div>
             <div className='searchDiv'>
-                <label><span>Search: </span><input name="search"/></label>
-                {getTagEls(props.tags)}
+                <label><span>Пошук: </span></label><input name="search"/>
+                <button id = "btnLoad" onClick={(event) => {
+                        load(formUrl(name, props.resource_type_id), setData, setLoaded);
+                    }} >Знайти</button>
+                {getTagEls(props.tags, [])}
             </div>
             { props.style == "card" 
                 ? showCard(props, definitions)
-                : showTable(props, definitions)
+                : showTable(props, definitions, setLoaded)
             }
-            <button id = "btnLoad" onClick={(event) => {
-                    load(formUrl(name, props.resource_type_id), setData);
-                }} >load</button>
-            <a href={ name + "/0" }>add</a>
+            { (props.editable && props.style != "card") &&
+                <a href={ name + "/0?resource_type_id=" + (props.resource_type_id) }><button className="button-add">Додати</button></a>
+            }
         </div>
     )
 }
 
-function showTable(props, definitions)
+function showTable(props, definitions, setLoaded)
 {
     let columns = props.columns;
     let name = props.name;
     let checkboxFields = props.checkboxFields;
+    let fieldNames;
+    if (props.fieldNames != undefined)
+    {
+        fieldNames = props.fieldNames;
+    }
+    else 
+    {
+        fieldNames = [];
+    }
+
     return(
         <table>
             <thead>
                 <tr>
-                    {columns.map((item, idx) => 
-                        <th key = {idx.toString()}>{item}</th>
+                    {columns.map((item, idx) =>
+                        <th key = {idx.toString()}>{ fieldNames?.[idx] ?? item}</th>
                     )}
+                    <th/>
                 </tr>
             </thead>
             <tbody>
@@ -62,17 +77,25 @@ function showTable(props, definitions)
                         }
                         </td>
                     )}
-                    { name=="resourceType" && 
-                        <td>
-                            <a href={"resource?resource_type_id=" + item.id}>resources</a>
-                        </td>
-                    }
-                    { props.editable && 
-                        <td>
-                            <a href={props.name + "/" + item.id}>edit</a>
-                            <a href="#" onClick={(e) => { e.preventDefault(); deleteItem(item.id, props.name); }}>delete</a>
-                        </td>
-                    }  
+                    <td>
+                        { name=="resourceType" &&
+                        <> 
+                            { isLoggedIn() ?
+                                <a href={"booking/0?resource_type_id=" + item.id}><button className="button-book">Бронювати</button></a>
+                                : <a href={"login"}><button className="button-book">Бронювати</button></a>
+                            }
+                        </>
+                        }
+                        { props.editable && 
+                            <>
+                                { name=="resourceType" && 
+                                    <a href={"resource?resource_type_id=" + item.id}><button className="button-resource">Ресурси</button></a>
+                                }
+                                <a href={props.name + "/" + item.id}><button className="button-edit">Редагувати</button></a>
+                                <a href="#" onClick={(e) => { e.preventDefault(); deleteItem(item.id, props.name, setLoaded); }}><button className="button-delete">Видалити</button></a>
+                            </>
+                        }  
+                    </td>
                 </tr>
                 )}
             </tbody>
@@ -91,10 +114,18 @@ function showCard(props, definitions)
             { definitions.map((item, idx) => 
                 <div className="card" name={item.title} key={idx}>
                     <div className="title">{item.title}</div>
+                    <div className="image">
+                        <img src={
+                                item.pictureLink ? item.pictureLink : "/logo.png"
+                            } width="150" height="150"/>
+                    </div>
                     <div className="description">{item.description}</div>
                     <div className="software">{item.software}</div>
                     <div className="tags">{item.tags}</div>
                     <div className="available">Кількість: {item.available}</div>
+                    { isLoggedIn() && 
+                        <div className="available"><a href={"booking/0?resource_type_id=" + item.id}><button>Бронювати</button></a></div>
+                    }
                 </div>
             )}
             <div className="clear-fix"/>
@@ -102,7 +133,7 @@ function showCard(props, definitions)
     )
 }
 
-function load(filename, setData)
+function load(filename, setData, setLoaded)
 {
     if (filename) {
         console.log("loading from:", filename);
@@ -110,16 +141,17 @@ function load(filename, setData)
             headers: {
                 "Authorization": getToken()
             },
-            method: 'GET',       
-            crossorigin: true,    
+            method: 'GET',
+            crossorigin: true,
         })
         .then(res => {
             if (!res.ok)
-                {
-                    setData([]);
-                    throw new Error("blocked");
-                }
-                return res.json();
+            {
+                setData([]);
+                throw new Error("blocked");
+            }
+            setLoaded(true);
+            return res.json();
         })
         .then(res => setData(res))
         .catch(_ => console.log(_));
@@ -130,7 +162,13 @@ function load(filename, setData)
 function formUrl(name, resource_type_id)
 {
     let url = "https://localhost:7089/api/" + name +"Items";
-    let search =  document.querySelector(".searchDiv input[name=search]").value;
+    let search = ""; 
+    try {
+        search = document.querySelector(".searchDiv input[name=search]").value;
+    }
+    catch{
+        console.log("loading first time");
+    }
     let tags = getTagValues();
     url += "?search=" + search;
 
@@ -154,8 +192,12 @@ export function getTagEls(tags, values = [])
     }
     return (
         <div className="tags">
-            { tags.map((item, idx) =>
-                <label key={idx} name={item}>{item}<input defaultChecked={values.includes(item)} name={item} value={item} type="checkbox"/></label>
+            { tags.map((item, idx) => 
+                <span key={idx}>
+                    {console.log(item)}
+                    <label className="labelInput" name={item[0]}>{item[1]??item[0]}</label>
+                    <input defaultChecked={values.includes(item[0])} name={item[0]} value={item[0]} type="checkbox"/>
+                </span>
             )}
         </div>
     )
@@ -173,17 +215,20 @@ export function getTagValues()
     return values;
 }
 
-function deleteItem(id, url) 
+function deleteItem(id, url, setLoaded) 
 {
     fetch("https://localhost:7089/api/" + url + "Items/" + id, {   
         method: 'Delete',       
         crossorigin: true,
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 
+            'Content-Type': 'application/json' , 
+            "Authorization": getToken()
+        }
         })
         .then(res => {
             let data = res.json();
             if (res.status === 200) {
-                alert("deleted successfully");    
+                setLoaded(false);
             } else {
                 data.then(res => alert(res.message));                        
             }
@@ -197,16 +242,31 @@ function selectItem(e, id, selectId)
     e.currentTarget.closest("table").querySelectorAll("tr").forEach(row => row.classList.remove("active"));
     e.currentTarget.classList.add("active");
 
-    let idEl = document.getElementById(selectId);
-    if (idEl) 
-    {    
-        idEl.value = id;
+    let selectDom = document.getElementById(selectId);
+
+    console.log(selectDom);
+    if (selectDom) 
+    {
+        selectDom.value = id;
     }
 }
 
 function update(checkbox, item, url, field, definitions)
 {
-    fetchSingle(item, url, field, 0+checkbox.checked);
+    if (!isAdmin) 
+    {
+        if (checkbox.checked)
+        {
+            if (window.confirm("Ви впевнені, що хочете відмінити?"))
+            {
+                fetchSingle(item, url, field, 0+checkbox.checked);
+            }
+        }
+    }
+    else 
+    {
+        fetchSingle(item, url, field, 0+checkbox.checked);
+    }
 }
 
 function fetchSingle(item, url, field, value, )
@@ -216,7 +276,10 @@ function fetchSingle(item, url, field, value, )
     fetch("https://localhost:7089/api/" + url + "Items/" + field + "/" + id, {   
         method: 'Put',       
         crossorigin: true,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+            'Content-Type': 'application/json', 
+            "Authorization": getToken()
+        },
         body: JSON.stringify({ id: id, [field]: value })
         })
         .then(res => {
